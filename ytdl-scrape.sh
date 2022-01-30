@@ -2,15 +2,25 @@
 
 # An utility for downloading videos or audio with youtube-dl more easily.
 
+
 # --- INIT ---
 
+# -- Source some common functions --
 source commons.sh
-declare URL=""						# The URL to download from.
-declare OUTPUT=""					# The output folder/file.
-declare DOWNLOADER_ARGS="-c -j 32 -x 16 -s 8 -k 1M"	# Any arguments to give to the external downloader.
-declare CACHE=""					# If we should use caching. Prevents redownloads of already present files.
-declare EXTRACT_AUDIO=""				# If we should extract audio (and discard video).
-declare KWARGS=""					# Any kwargs for youtube-dl
+
+# -- Declare variables --
+# The URL to download from.
+declare URL=""
+# The output folder/file.
+declare OUTPUT=""
+# Any arguments to give to the external downloader.
+declare DOWNLOADER_ARGS="--max-concurrent-downloads=32 --max-connection-per-server=16 --split=8 --min-split-size=1M --continue=true"
+# If we should use caching. Prevents redownloads of already present files.
+declare CACHE=""
+# If we should extract audio (and discard video).
+declare EXTRACT_AUDIO=""
+# Any kwargs for youtube-dl
+declare KWARGS=""
 
 
 # --- PARSE ARGS ---
@@ -95,7 +105,7 @@ youtube-dl \
 	--write-sub  --sub-format best --sub-lang en \
 	--output ${OUTPUT}/"%(title)s.%(ext)s" ${CACHE} \
 	--external-downloader aria2c \
-	--external-downloader-args "\"${DOWNLOADER_ARGS}\"" \
+	--external-downloader-args "${DOWNLOADER_ARGS}" \
 	${KWARGS} ${URL}
 
 	# Don't stop on errors. Keep downloading the entire playlist.
@@ -112,9 +122,6 @@ youtube-dl \
 
 
 # Notes on the aria2c arguments used:
-#
-# -c, --continue [true|false]
-#   Continue downloading a partially downloaded file.
 #
 # -j, --max-concurrent-downloads=<N>
 #   Set the maximum number of parallel downloads for every queue item.
@@ -143,5 +150,8 @@ youtube-dl \
 #   You can append K or M (1K = 1024, 1M = 1024K).
 #   Possible Values: 1M - 1024M
 #   Default: 20M
+#
+# -c, --continue=[true|false]
+#   Continue downloading a partially downloaded file.
 #
 # Source: aria2c manpage

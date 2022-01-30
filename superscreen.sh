@@ -2,15 +2,18 @@
 
 # An utility for deploying unattended processes in screen more easily.
 
+
 # --- INIT ---
+
 source ${HOME}/util/commons.sh		# Used for logging function.
 declare TITLE=""			# The title of the screen.
 declare COMMAND=""			# The command to run.
 declare ALLOW_MULTIPLE=false		# If we allow multiple instances running at once.
-declare ARGUMENT_USAGE=
+declare USE_SCREEN=true			# Debug argument for disabling the use of screen.
 
 
 # --- FUNCTIONS ---
+
 help () {
   necho "USAGE:
 [-m|--multiple] ([-t|--title] <TITLE>) ([-c|--cmd|--command] <COMMAND...>)
@@ -30,6 +33,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     -m|--multiple)
       ALLOW_MULTIPLE=true
+      shift  # Shift past argument
+      ;;
+    --no-screen)
+      USE_SCREEN=false
       shift  # Shift past argument
       ;;
     -c|--command|--cmd)
@@ -84,13 +91,15 @@ fi
 necho "Title  : ${TITLE}"
 necho "Command: ${COMMAND}"
 
-if ! ${ALLOW_MULTIPLE} && screen -ls | grep -q "${TITLE}"; then
+if ! $ALLOW_MULTIPLE && screen -ls | grep -q "${TITLE}"; then
   necho "Screen instance \"${TITLE}\" is already running."
   exit 1
 else
-  # Note to self: Dont use quotes around screens command argument, IT WILL _NOT_ WORK.
-  screen -dmS "${TITLE}" ${COMMAND}
-  #sh -c ${COMMAND}
-  #screen -S "${TITLE}" ${COMMAND}
+  if $USE_SCREEN; then
+    # Note to self: Dont use quotes around screens command argument, IT WILL _NOT_ WORK.
+    screen -dmS "${TITLE}" $COMMAND
+  else
+    sh -c "${COMMAND}"
+  fi
   exit 0
 fi
