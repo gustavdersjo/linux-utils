@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# An utility for downloading videos or audio with youtube-dl more easily.
+
 # --- INIT ---
 
 source commons.sh

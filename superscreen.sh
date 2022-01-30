@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# An utility for deploying unattended processes in screen more easily.
+
 # --- INIT ---
 source ${HOME}/util/commons.sh		# Used for logging function.
 declare TITLE=""			# The title of the screen.

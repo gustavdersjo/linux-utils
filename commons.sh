@@ -1,6 +1,6 @@
 #!/bin/false
 
-# Some simple and lightweight utilities.
+# Some simple and lightweight utilities that scripts can use.
 # No error checking unless otherwise stated.
 
 
