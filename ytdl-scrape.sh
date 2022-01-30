@@ -5,10 +5,11 @@
 
 # --- INIT ---
 
-# -- Source some common functions --
-source commons.sh
+# -- Sourcing --
+# Used for logging function.
+source ${HOME}/util/commons.sh
 
-# -- Declare variables --
+# -- Declarations --
 # The URL to download from.
 declare URL=""
 # The output folder/file.
